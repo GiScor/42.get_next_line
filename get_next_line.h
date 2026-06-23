@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 200000000
+# define BUFFER_SIZE 5
 #endif // BUFFER_SIZE
 #ifndef GET_NEXT_LINE_H
 
@@ -24,7 +24,7 @@ char	*get_next_line(int fd);
 char	*lalloc(char *buf);
 size_t	ft_strlen(char *str);
 char	*ft_strmerge(char *s1, char *s2);
-char	*gnt_rec(int fd, char *buf, char *str);
+char	*gnl_rec(int fd, char *buf, char *str);
 
 #endif // GET_NEXT_LINE_H
 

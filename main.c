@@ -21,9 +21,10 @@ int	main()
 		/*}*/
 	/*}*/
 	str = get_next_line(fd);
+	int	i = 1;
 	while (str)
 	{
-		printf("%s", str);
+		printf(" [%0d]%s", i++, str);
 		str = get_next_line(fd);
 	}
 

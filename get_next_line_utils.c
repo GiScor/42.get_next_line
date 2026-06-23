@@ -40,28 +40,31 @@ size_t	ft_strlen(char *str)
 	return (i);
 }
 
-// str has to be alloc'd before calling gnt_rec
-char	*gnt_rec(int fd, char *buf, char *str)
+// str has to be alloc'd before calling gnl_rec
+char	*gnl_rec(int fd, char *buf, char *str)
 {
 	char	*next;
-	int	i;
+	int		i;
 
 	i = 0;
+	str = lalloc(buf);
 	next = str;
 	while (*buf != '\n' && *buf)
+		str[i++] = *buf++;
+	if (*buf == '\n')
 	{
 		str[i] = *buf;
-		i++;
 		buf++;
+		return (str);
 	}
-	if (*buf)
-		str[i] = *buf;
+	buf -= i;
 	if (str[ft_strlen(str)] != '\n')
 	{
-		next = gnt_rec(fd, buf, next);
+		if (read(fd, buf, BUFFER_SIZE) == 0)
+				return (0);
+		next = gnl_rec(fd, buf, next);
 		str = ft_strmerge(str, next);
 	}
-	free(next);
 	return (str);
 }
 
