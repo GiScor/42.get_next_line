@@ -39,3 +39,55 @@ size_t	ft_strlen(char *str)
 		i++;
 	return (i);
 }
+
+// str has to be alloc'd before calling gnt_rec
+char	*gnt_rec(int fd, char *buf, char *str)
+{
+	char	*next;
+	int	i;
+
+	i = 0;
+	next = str;
+	while (*buf != '\n' && *buf)
+	{
+		str[i] = *buf;
+		i++;
+		buf++;
+	}
+	if (*buf)
+		str[i] = *buf;
+	if (str[ft_strlen(str)] != '\n')
+	{
+		next = gnt_rec(fd, buf, next);
+		str = ft_strmerge(str, next);
+	}
+	free(next);
+	return (str);
+}
+
+char	*ft_strmerge(char *s1, char *s2)
+{
+	char	*s3;
+	size_t	l1;
+	size_t	l2;
+
+	l1 = ft_strlen(s1);
+	l2 = ft_strlen(s2);
+	s3 = malloc(l1 + l2 + 1);
+	l1 = 0;
+	l2 = 0;
+	while (s1[l1])
+	{
+		s3[l1] = s1[l1];
+		l1++;
+	}
+	while (s2[l2])
+	{
+		s3[l1 + l2] = s2[l2];
+		l2++;
+	}
+	free(s1);
+	free(s2);
+	s3[l1 + l2] = 0;
+	return (s3);
+}

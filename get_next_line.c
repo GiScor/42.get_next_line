@@ -26,7 +26,8 @@ char	*get_next_line(int fd)
 	}
 	if (*buf == '\n')
 		buf++;
-	read(fd, buf, BUFFER_SIZE);
+	if (!*buf)
+		read(fd, buf, BUFFER_SIZE);
 	str = lalloc(buf);
 	while (*buf != '\n' && *buf)
 	{
