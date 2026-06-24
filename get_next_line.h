@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/22 14:52:49 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/06/24 13:55:05 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,10 @@
 char	*get_next_line(int fd);
 char	*lalloc(char *buf);
 size_t	ft_strlen(char *str);
-char	*ft_strmerge(char *s1, char *s2);
 char	*gnl_rec(int fd, char *buf, char *str);
+int		ft_strchr(const char *s, int c);
+void	*ft_memmove(void *dest, const void *src, size_t n);
+char	*ft_strmerge(char *s1, char *s2);
 
 #endif // GET_NEXT_LINE_H
 

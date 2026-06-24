@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:21:56 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/22 13:09:15 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/06/24 13:59:54 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,4 +93,46 @@ char	*ft_strmerge(char *s1, char *s2)
 	free(s2);
 	s3[l1 + l2] = 0;
 	return (s3);
+}
+
+int	ft_strchr(const char *s, int c)
+{
+	char	*ptr;
+	int		i;
+
+	i = 0;
+	ptr = (char *)s;
+	while (ptr[i])
+	{
+		if (ptr[i] == (char)c)
+			return (i);
+		i++;
+	}
+	if (ptr[i] == (char)c)
+		return (i);
+	return (-1);
+}
+
+void	*ft_memmove(void *dest, const void *src, size_t n)
+{
+	char		*d;
+	const char	*s;
+
+	d = (char *)dest;
+	s = (const char *)src;
+	if (!dest && !src)
+		return (NULL);
+	if (d > s && d < (s + n))
+	{
+		d += n;
+		s += n;
+		while (n--)
+			*--d = *--s;
+	}
+	else
+	{
+		while (n--)
+			*d++ = *s++;
+	}
+	return (dest);
 }
