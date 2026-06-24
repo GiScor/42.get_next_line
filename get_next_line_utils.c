@@ -20,13 +20,12 @@ char	*lalloc(char *buf)
 	c = 0;
 	if (!*buf)
 		return (NULL);
-	while (*buf && *(buf-1) != '\n')
-	{
-		buf++;
+	while (buf[c] && buf[c] != '\n')
 		c++;
-	}
-	str = malloc(c + 1);
-	str[c + 1] = 0;
+	if (buf[c] == '\n')
+		c++;
+	str = malloc(c);
+	str[c] = 0;
 	return (str);
 }
 
@@ -58,13 +57,13 @@ char	*gnl_rec(int fd, char *buf, char *str)
 		return (str);
 	}
 	buf -= i;
-	if (str[ft_strlen(str)] != '\n')
-	{
+	/*if (str[ft_strlen(str)] != '\n')*/
+	/*{*/
 		if (read(fd, buf, BUFFER_SIZE) == 0)
 				return (0);
 		next = gnl_rec(fd, buf, next);
 		str = ft_strmerge(str, next);
-	}
+	/*}*/
 	return (str);
 }
 

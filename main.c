@@ -27,5 +27,5 @@ int	main()
 		printf(" [%0d]%s", i++, str);
 		str = get_next_line(fd);
 	}
-
+	free(str);
 }

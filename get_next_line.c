@@ -22,17 +22,17 @@ char	*get_next_line(int fd)
 	i = 0;
 	test = malloc(BUFFER_SIZE + 1);
 	test[BUFFER_SIZE] = 0;
-	while (test[i])
-	{
-			test[i] = buf[i];
-			i++;
-	}
 	if (!buf)
 	{
 		buf = malloc(BUFFER_SIZE + 1);
 		buf[BUFFER_SIZE] = 0;
 	}
-	if (ft_strchr(buf, '\n') < 0)
+	while (test[i])
+	{
+			test[i] = buf[i];
+			i++;
+	}
+	if (ft_strchr(buf, '\n') < 0 || !buf[ft_strchr(buf, '\n') + 1])
 		read(fd, buf, BUFFER_SIZE);
 	else
 		ft_memmove(buf, buf+ft_strchr(buf, '\n'), BUFFER_SIZE);
@@ -42,5 +42,6 @@ char	*get_next_line(int fd)
 			str = gnl_rec(fd, buf, "");
 	else
 			return (0);
+	free(test);
 	return (str);
 }
