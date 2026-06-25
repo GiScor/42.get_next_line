@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 5
+# define BUFFER_SIZE 40
 #endif // BUFFER_SIZE
 #ifndef GET_NEXT_LINE_H
 
@@ -19,14 +19,15 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stddef.h>
 
 char	*get_next_line(int fd);
-char	*lalloc(char *buf);
-size_t	ft_strlen(char *str);
+void	next_nl(char **head);
+size_t	ft_realloc(char **buf, char **head);
+char	*ft_strchr(const char *s, int c);
 char	*gnl_rec(int fd, char *buf, char *str);
-int		ft_strchr(const char *s, int c);
-void	*ft_memmove(void *dest, const void *src, size_t n);
 char	*ft_strmerge(char *s1, char *s2);
+char	*lalloc(char *buf);
 
 #endif // GET_NEXT_LINE_H
 

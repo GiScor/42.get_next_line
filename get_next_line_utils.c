@@ -1,45 +1,85 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 11:21:56 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/24 13:59:54 by gscorzon         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-char	*lalloc(char *buf)
+/*
+void	next_nl(char **head)
 {
-	int		c;
-	char	*str;
-
-	c = 0;
-	if (!*buf)
-		return (NULL);
-	while (buf[c] && buf[c] != '\n')
-		c++;
-	if (buf[c] == '\n')
-		c++;
-	str = malloc(c);
-	str[c] = 0;
-	return (str);
+	if (ft_strchr(**head, '\n'))
+	{
+		while (**head != '\n')
+			(*head)++;
+		(*head)++;
+	}
 }
+*/
 
-size_t	ft_strlen(char *str)
+// Alloc new memory to buf to append the new read content
+size_t	ft_realloc(char **buf, char **head)
 {
-	size_t	i;
+	size_t	len;
+	char	*tmp;
+	int		i;
 
 	i = 0;
-	while (str[i])
+	len = 0;
+	while ((*buf)[len])
+		len++;
+	tmp = malloc(len + 1);
+	/*i = ft_strlcpy(tmp, *head, len);*/
+	while ((*head)[i])
+	{
+		tmp[i] = (*head)[i];
 		i++;
-	return (i);
+	}
+	*buf = *head;
+	free(*buf);
+	*buf = malloc(len + BUFFER_SIZE + 1);
+	(*buf)[len + BUFFER_SIZE] = 0;
+	while ((*buf)[i])
+	{
+		tmp[i] = (*head)[i];
+		i--;
+	}
+	*head = *buf;
+	*buf += i;
+	return (len + BUFFER_SIZE);
 }
 
-// str has to be alloc'd before calling gnl_rec
+/*size_t	ft_strlcpy(char *dst, const char *src, size_t size)*/
+/*{*/
+	/*size_t	dst_len;*/
+	/*size_t	i;*/
+
+	/*i = 0;*/
+	/*dst_len = 0;*/
+	/*if (size < 1)*/
+		/*return (ft_strlen(src));*/
+	/*while (src[i] && i < size - 1)*/
+	/*{*/
+		/*dst[i] = src[i];*/
+		/*i++;*/
+	/*}*/
+	/*dst[i] = 0;*/
+	/*while (dst[dst_len])*/
+		/*dst_len++;*/
+	/*return (ft_strlen(src));*/
+/*}*/
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	*ptr;
+
+	ptr = (char *)s;
+	while (*ptr)
+	{
+		if (*ptr == (char)c)
+			return (ptr);
+		ptr++;
+	}
+	if (*ptr == (char)c)
+		return (ptr);
+	return (NULL);
+}
+
 char	*gnl_rec(int fd, char *buf, char *str)
 {
 	char	*next;
@@ -57,13 +97,10 @@ char	*gnl_rec(int fd, char *buf, char *str)
 		return (str);
 	}
 	buf -= i;
-	/*if (str[ft_strlen(str)] != '\n')*/
-	/*{*/
-		if (read(fd, buf, BUFFER_SIZE) == 0)
-				return (0);
-		next = gnl_rec(fd, buf, next);
-		str = ft_strmerge(str, next);
-	/*}*/
+	if (read(fd, buf, BUFFER_SIZE) == 0)
+		return (0);
+	next = gnl_rec(fd, buf, next);
+	str = ft_strmerge(str, next);
 	return (str);
 }
 
@@ -73,8 +110,10 @@ char	*ft_strmerge(char *s1, char *s2)
 	size_t	l1;
 	size_t	l2;
 
-	l1 = ft_strlen(s1);
-	l2 = ft_strlen(s2);
+	l1 = 0;
+	while (s1[l1++])
+	l2 = 0;
+	while (s2[l2++])
 	s3 = malloc(l1 + l2 + 1);
 	l1 = 0;
 	l2 = 0;
@@ -94,44 +133,19 @@ char	*ft_strmerge(char *s1, char *s2)
 	return (s3);
 }
 
-int	ft_strchr(const char *s, int c)
+char	*lalloc(char *buf)
 {
-	char	*ptr;
-	int		i;
+	int		c;
+	char	*str;
 
-	i = 0;
-	ptr = (char *)s;
-	while (ptr[i])
-	{
-		if (ptr[i] == (char)c)
-			return (i);
-		i++;
-	}
-	if (ptr[i] == (char)c)
-		return (i);
-	return (-1);
-}
-
-void	*ft_memmove(void *dest, const void *src, size_t n)
-{
-	char		*d;
-	const char	*s;
-
-	d = (char *)dest;
-	s = (const char *)src;
-	if (!dest && !src)
+	c = 0;
+	if (!*buf)
 		return (NULL);
-	if (d > s && d < (s + n))
-	{
-		d += n;
-		s += n;
-		while (n--)
-			*--d = *--s;
-	}
-	else
-	{
-		while (n--)
-			*d++ = *s++;
-	}
-	return (dest);
+	while (buf[c] && buf[c] != '\n')
+		c++;
+	if (buf[c] == '\n')
+		c++;
+	str = malloc(c + 1);
+	str[c] = 0;
+	return (str);
 }
