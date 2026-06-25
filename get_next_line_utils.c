@@ -31,7 +31,7 @@ size_t	ft_realloc(char **buf, char **head)
 		i++;
 	}
 	*buf = *head;
-	free(*buf);
+	free(buf);
 	*buf = malloc(len + BUFFER_SIZE + 1);
 	(*buf)[len + BUFFER_SIZE] = 0;
 	while ((*buf)[i])
@@ -80,26 +80,25 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*gnl_rec(int fd, char *buf, char *str)
+char	*gnl_rec(int fd, char **head, char *str)
 {
 	char	*next;
 	int		i;
 
 	i = 0;
-	str = lalloc(buf);
+	str = lalloc(*head);
 	next = str;
-	while (*buf != '\n' && *buf)
-		str[i++] = *buf++;
-	if (*buf == '\n')
+	while (**head != '\n' && **head)
+		str[i++] = *((*head)++);
+	if (**head == '\n')
 	{
-		str[i] = *buf;
-		buf++;
+		str[i] = **head;
+		(*head)++;
 		return (str);
 	}
-	buf -= i;
-	if (read(fd, buf, BUFFER_SIZE) == 0)
+	if (read(fd, *head, BUFFER_SIZE) == 0)
 		return (0);
-	next = gnl_rec(fd, buf, next);
+	next = gnl_rec(fd, head, next);
 	str = ft_strmerge(str, next);
 	return (str);
 }

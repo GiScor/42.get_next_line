@@ -25,7 +25,7 @@ char	*get_next_line(int fd);
 void	next_nl(char **head);
 size_t	ft_realloc(char **buf, char **head);
 char	*ft_strchr(const char *s, int c);
-char	*gnl_rec(int fd, char *buf, char *str);
+char	*gnl_rec(int fd, char **head, char *str);
 char	*ft_strmerge(char *s1, char *s2);
 char	*lalloc(char *buf);
 
