@@ -11,13 +11,15 @@ int	main()
 
 	/*printf("\t[Press ENTER to print next line]");*/
 	/*scanf("%c",&ch);*/
+	/*str = get_next_line(fd);*/
 	/*while (ch && str)*/
 	/*{*/
-		/*str = get_next_line(fd);*/
 		/*if (str)*/
 		/*{*/
 			/*printf("%s", str);*/
+			/*printf("\t[Press ENTER to print next line]");*/
 			/*scanf("%c",&ch);*/
+			/*str = get_next_line(fd);*/
 		/*}*/
 	/*}*/
 	str = get_next_line(fd);

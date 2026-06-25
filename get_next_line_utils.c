@@ -24,7 +24,7 @@ char	*lalloc(char *buf)
 		c++;
 	if (buf[c] == '\n')
 		c++;
-	str = malloc(c);
+	str = malloc(c + 1);
 	str[c] = 0;
 	return (str);
 }
@@ -99,6 +99,8 @@ int	ft_strchr(const char *s, int c)
 	char	*ptr;
 	int		i;
 
+	if (!s || !c)
+		return (-1);
 	i = 0;
 	ptr = (char *)s;
 	while (ptr[i])
