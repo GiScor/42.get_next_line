@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 40
+# define BUFFER_SIZE 1000000000
 #endif // BUFFER_SIZE
 #ifndef GET_NEXT_LINE_H
 
@@ -26,7 +26,7 @@ size_t	ft_strlen(char *str);
 char	*gnl_rec(int fd, char *buf, char *str);
 int		ft_strchr(const char *s, int c);
 void	*ft_memmove(void *dest, const void *src, size_t n);
-char	*ft_strmerge(char *s1, char *s2);
+char	*ft_strjoin(const char *s1, const char *s2);
 
 #endif // GET_NEXT_LINE_H
 

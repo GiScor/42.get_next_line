@@ -43,6 +43,7 @@ size_t	ft_strlen(char *str)
 char	*gnl_rec(int fd, char *buf, char *str)
 {
 	char	*next;
+	char	*old;
 	int		i;
 
 	i = 0;
@@ -62,36 +63,39 @@ char	*gnl_rec(int fd, char *buf, char *str)
 		if (read(fd, buf, BUFFER_SIZE) == 0)
 				return (0);
 		next = gnl_rec(fd, buf, next);
-		str = ft_strmerge(str, next);
+		old = str;
+		str = ft_strjoin(str, next);
+		free(old);
 	/*}*/
 	return (str);
 }
 
-char	*ft_strmerge(char *s1, char *s2)
+char    *ft_strjoin(char const *s1, char const *s2)
 {
-	char	*s3;
-	size_t	l1;
-	size_t	l2;
+    char    *s3;
+    size_t  l1;
+    size_t  l2;
+    size_t  i;
 
-	l1 = ft_strlen(s1);
-	l2 = ft_strlen(s2);
-	s3 = malloc(l1 + l2 + 1);
-	l1 = 0;
-	l2 = 0;
-	while (s1[l1])
-	{
-		s3[l1] = s1[l1];
-		l1++;
-	}
-	while (s2[l2])
-	{
-		s3[l1 + l2] = s2[l2];
-		l2++;
-	}
-	free(s1);
-	free(s2);
-	s3[l1 + l2] = 0;
-	return (s3);
+    l1 = ft_strlen((char *)s1);
+    l2 = ft_strlen((char *)s2);
+    s3 = malloc((l1 + l2) * sizeof(char) + 1);
+    if (!s3)
+        return (NULL);
+    i = 0;
+    while (i < l1)
+    {
+        s3[i] = s1[i];
+        i++;
+    }
+    i = 0;
+    while (i < l2)
+    {
+        s3[i + l1] = s2[i];
+        i++;
+    }
+    s3[i + l1] = 0;
+    return (s3);
 }
 
 int	ft_strchr(const char *s, int c)

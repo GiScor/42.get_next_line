@@ -17,9 +17,11 @@ char	*get_next_line(int fd)
 	static char	*buf;
 	char		*str;
 	/*char		*test;*/
-	/*int			i;*/
+	int			i;
 
-	/*i = 0;*/
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	i = 1;
 	/*test = malloc(BUFFER_SIZE + 1);*/
 	/*test[BUFFER_SIZE] = 0;*/
 	if (!buf)
@@ -36,9 +38,11 @@ char	*get_next_line(int fd)
 			/*i++;*/
 	/*}*/
 	if (ft_strchr(buf, '\n') < 0 || !buf[ft_strchr(buf, '\n') + 1])
-		read(fd, buf, BUFFER_SIZE);
+		i = read(fd, buf, BUFFER_SIZE);
 	else
 		ft_memmove(buf, buf+ft_strchr(buf, '\n'), BUFFER_SIZE);
+	if (i == 0)
+		return (NULL);
 	if (*buf == '\n')
 		ft_memmove(buf, buf+1, BUFFER_SIZE);
 	/*if (*test != *buf)*/
