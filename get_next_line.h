@@ -6,12 +6,12 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/24 13:55:05 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/06/27 12:24:22 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1000000000
+# define BUFFER_SIZE 1000
 #endif // BUFFER_SIZE
 #ifndef GET_NEXT_LINE_H
 

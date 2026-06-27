@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:21:56 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/24 13:59:54 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/06/27 12:21:07 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@ char	*lalloc(char *buf)
 	if (buf[c] == '\n')
 		c++;
 	str = malloc(c + 1);
+	if (!str)
+		return (NULL);
 	str[c] = 0;
 	return (str);
 }
