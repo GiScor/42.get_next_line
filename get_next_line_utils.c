@@ -5,141 +5,137 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/06/18 11:21:56 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/06/27 12:21:07 by gscorzon         ###   ########.fr       */
+/*   Created: 2026/07/01 10:09:09 by gscorzon          #+#    #+#             */
+/*   Updated: 2026/07/01 15:14:47 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*lalloc(char *buf)
+char	*ft_strchr(const char *s, int c)
 {
-	int		c;
-	char	*str;
+	char	*ptr;
 
-	c = 0;
-	if (!*buf)
+	if (!s)
 		return (NULL);
-	while (buf[c] && buf[c] != '\n')
-		c++;
-	if (buf[c] == '\n')
-		c++;
-	str = malloc(c + 1);
-	if (!str)
-		return (NULL);
-	str[c] = 0;
-	return (str);
+	ptr = (char *)s;
+	while (*ptr)
+	{
+		if (*ptr == (char)c)
+			return (ptr);
+		ptr++;
+	}
+	if (*ptr == (char)c)
+		return (ptr);
+	return (NULL);
 }
 
-size_t	ft_strlen(char *str)
+size_t	ft_strlen(const char *s)
 {
 	size_t	i;
 
+	if (!s || !*s)
+		return (0);
 	i = 0;
-	while (str[i])
+	while (s[i])
 		i++;
 	return (i);
 }
 
-// str has to be alloc'd before calling gnl_rec
-char	*gnl_rec(int fd, char *buf, char *str)
+char	*ft_strjoin(char *s1, char *s2)
 {
-	char	*next;
-	char	*old;
-	int		i;
+	char	*s3;
+	size_t	i;
+	size_t	l1;
+	size_t	l2;
 
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
+	l1 = ft_strlen(s1);
+	l2 = ft_strlen(s2);
+	s3 = malloc((l1 + l2) + 1);
+	if (!s3)
+		return (NULL);
 	i = 0;
-	str = lalloc(buf);
-	next = str;
-	while (*buf != '\n' && *buf)
-		str[i++] = *buf++;
-	if (*buf == '\n')
+	while (i < l1)
 	{
-		str[i] = *buf;
-		buf++;
-		return (str);
-	}
-	buf -= i;
-	/*if (str[ft_strlen(str)] != '\n')*/
-	/*{*/
-		if (read(fd, buf, BUFFER_SIZE) == 0)
-				return (0);
-		next = gnl_rec(fd, buf, next);
-		old = str;
-		str = ft_strjoin(str, next);
-		free(old);
-	/*}*/
-	return (str);
-}
-
-char    *ft_strjoin(char const *s1, char const *s2)
-{
-    char    *s3;
-    size_t  l1;
-    size_t  l2;
-    size_t  i;
-
-    l1 = ft_strlen((char *)s1);
-    l2 = ft_strlen((char *)s2);
-    s3 = malloc((l1 + l2) * sizeof(char) + 1);
-    if (!s3)
-        return (NULL);
-    i = 0;
-    while (i < l1)
-    {
-        s3[i] = s1[i];
-        i++;
-    }
-    i = 0;
-    while (i < l2)
-    {
-        s3[i + l1] = s2[i];
-        i++;
-    }
-    s3[i + l1] = 0;
-    return (s3);
-}
-
-int	ft_strchr(const char *s, int c)
-{
-	char	*ptr;
-	int		i;
-
-	if (!s || !c)
-		return (-1);
-	i = 0;
-	ptr = (char *)s;
-	while (ptr[i])
-	{
-		if (ptr[i] == (char)c)
-			return (i);
+		s3[i] = s1[i];
 		i++;
 	}
-	if (ptr[i] == (char)c)
-		return (i);
-	return (-1);
+	i = 0;
+	while (i < l2)
+	{
+		s3[i + l1] = s2[i];
+		i++;
+	}
+	s3[i + l1] = 0;
+	if (s1)
+		free(s1);
+	if (s2)
+		free(s2);
+	return (s3);
 }
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+/*char	*gnl_rec(int fd, char *buf, char *o_line)*/
+char	*gnl_rec(int fd, char *buf, int status)
 {
-	char		*d;
-	const char	*s;
+	char	*ptr;
+	char	*line;
+	int		i;
 
-	d = (char *)dest;
-	s = (const char *)src;
-	if (!dest && !src)
-		return (NULL);
-	if (d > s && d < (s + n))
+	if (status <= 0)
+		buf = NULL;
+	i = 0;
+	ptr = ft_strchr(buf, '\n');
+	if (!ptr)
 	{
-		d += n;
-		s += n;
-		while (n--)
-			*--d = *--s;
+		line = linefill(buf, ptr);
+		status = read(fd, buf, BUFFER_SIZE);
+		line = ft_strjoin(line, gnl_rec(fd, buf, status));
 	}
+	if (ptr)
+		line = linefill(buf, ptr);
+	if (ptr && ptr != &buf[BUFFER_SIZE]) 
+	{
+		if (*buf == ptr[i])
+			ptr = buf + 1;
+		while (ptr[i])
+		{
+			buf[i] = ptr[i];
+			i++;
+		}
+		buf[i] = ptr[i];
+		while (buf[i])
+			buf[i++] = 0;
+		return (line);
+	}
+	if (ptr && ptr == &buf[BUFFER_SIZE])
+		status = read(fd, buf, BUFFER_SIZE);
+	return (line);
+}
+
+char	*linefill(char *buf, char *ptr)
+{
+	char	*line;
+	int		i;
+	size_t	len;
+
+	i = 0;
+	if (ptr)
+		len = (int)(ptr - buf);
 	else
+		len = BUFFER_SIZE;
+	line = malloc(len + 1);
+	if (!line)
+		return (NULL);
+	line[len] = 0;
+	while (buf [i] && buf[i] != '\n')
 	{
-		while (n--)
-			*d++ = *s++;
+		line[i] = buf[i];
+		i++;
 	}
-	return (dest);
+	line[i] = '\n';
+	return (line);
 }
