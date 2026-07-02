@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:01:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/02 15:18:40 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/02 17:12:23 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ char	*get_next_line(int fd)
 	if (!*buf)
 		line = gnl(fd, buf, NULL, read(fd, buf, BUFFER_SIZE));
 	line = gnl(fd, buf, NULL, 1);
-	if (line == NULL)
+	if (line == NULL && buf)
+	{
 		free(buf);
+		return (NULL);
+	}
 	return (line);
 }
