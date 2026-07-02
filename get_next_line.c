@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:01:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/01 16:21:43 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/02 15:18:40 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,19 @@
 char	*get_next_line(int fd)
 {
 	static char	*buf = NULL;
+	char		*line;
 	
 	if (!buf)
 	{
 		buf = malloc(BUFFER_SIZE + 1);
+		if (!buf)
+				return (NULL);
 		buf[BUFFER_SIZE] = 0;
 	}
-	return(gnl(fd, buf, NULL, read(fd, buf, BUFFER_SIZE)));
+	if (!*buf)
+		line = gnl(fd, buf, NULL, read(fd, buf, BUFFER_SIZE));
+	line = gnl(fd, buf, NULL, 1);
+	if (line == NULL)
+		free(buf);
+	return (line);
 }

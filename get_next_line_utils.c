@@ -1,9 +1,14 @@
 /*	TODO
  *
- 	*	Se buf inizia con '\n'
- 	*	ptr punta a '\n', quando facciamo memmove buf inizia con '\n'
-	*	La porcoddio di norma
-	*	Posso mettere funzioni anche in get_next_line.c?
+	*	La porcoddio di norma (Posso mettere funzioni anche in get_next_line.c)
+	|========================================================================================|
+	|    3 bytes in 1 blocks are definitely lost in loss record 1 of 2                       |
+	|       at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)|
+	|   	by 0x40140A: ft_strjoin (get_next_line_utils.c:63)								 |
+	|   	by 0x4017AB: gnl (get_next_line_utils.c:134)									 |
+	|   	by 0x4012A3: get_next_line (get_next_line.c:26)									 |
+	|   	by 0x4011E3: main (main.c:31)													 |
+	|========================================================================================|
  *
 */
 
@@ -51,7 +56,7 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	*ft_strjoin(char *s1, char *s2)
 {
 	char	*s3;
 	size_t	l1;
@@ -60,9 +65,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	l1 = ft_strlen(s1);
 	l2 = ft_strlen(s2);
-	s3 = malloc((l1 + l2) * sizeof(char) + 1);
+	s3 = malloc((l1 + l2) + 1);
 	if (!s3)
 		return (NULL);
+	s3[l1 + l2] = 0;
 	i = 0;
 	while (i < l1)
 	{
@@ -75,7 +81,8 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		s3[i + l1] = s2[i];
 		i++;
 	}
-	s3[i + l1] = 0;
+	free(s1);
+	free(s2);
 	return (s3);
 }
 
@@ -112,12 +119,16 @@ char	*gnl(int fd, char *buf, char *line, int found)
 		i++;
 	if (found > 0)
 		line = linefill(buf, i);
+	else
+		return (NULL);
 	if (ptr && i != ft_strlen(buf))
 	{
+		ptr++;
 		i = 0;
 		while(*ptr && buf[i])
 			buf[i++] = *ptr++;
-		buf[i] = *ptr;
+		if (*ptr)
+			buf[i] = *ptr;
 		while(buf[i])
 			buf[i++] = 0;
 	}
@@ -127,6 +138,8 @@ char	*gnl(int fd, char *buf, char *line, int found)
 			found = read(fd, buf, BUFFER_SIZE);
 		line = ft_strjoin(line, gnl(fd, buf, line, found));
 	}
+	else
+		found = read(fd, buf, BUFFER_SIZE);
 	if (found > 0)
 		return (line);
 	return (NULL);

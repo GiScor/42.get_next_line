@@ -27,6 +27,7 @@ int	main()
 	while (str)
 	{
 		printf(" [%0d]%s", i++, str);
+		free(str);
 		str = get_next_line(fd);
 	}
 	free(str);
