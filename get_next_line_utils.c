@@ -55,6 +55,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	l2;
 	size_t	i;
 
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
 	l1 = ft_strlen(s1);
 	l2 = ft_strlen(s2);
 	s3 = malloc((l1 + l2) + 1);
@@ -115,7 +119,7 @@ char	*gnl(int fd, char *buf, char *line, int found)
 		line = linefill(buf, i);
 	else
 	{
-		free(buf);
+		buf = GNL_DONE;
 		return (NULL);
 	}
 	if (ptr && i != ft_strlen(buf))			// If there's a nl in the buffer and it isn't
@@ -129,7 +133,7 @@ char	*gnl(int fd, char *buf, char *line, int found)
 		while(buf[i])						// clean the content that has been copied at
 			buf[i++] = 0;					// the beginning of buf.
 	}
-	else if (!ptr)							// ELSE IF no nl has been found inside buf.
+	else if (!ptr && found > 0)				// ELSE IF no nl has been found inside buf.
 	{										// read (thus changing the value of found),
 		found = read(fd, buf, BUFFER_SIZE);	// start the recursion and then join lines.
 		line = ft_strjoin(line, gnl(fd, buf, line, found));

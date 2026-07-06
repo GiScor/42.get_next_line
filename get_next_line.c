@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:01:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/02 19:05:32 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/06 16:59:21 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ char	*get_next_line(int fd)
 		line = gnl(fd, buf, NULL, 1);
 	if (line == NULL)
 	{
+		free(buf);
 		buf = GNL_DONE;
 		return (NULL);
 	}
