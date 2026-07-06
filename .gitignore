@@ -1,3 +1,5 @@
-ciao.txt
-francinette.txt
+*.swp
+*.out
+*.o
+*.a
 gnlTester/
