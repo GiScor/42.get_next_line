@@ -16,14 +16,14 @@ char	*get_next_line(int fd)
 {
 	static char	*buf = NULL;
 	char		*line;
-	
+
 	if (buf == GNL_DONE)
 		return (NULL);
 	if (!buf)
 	{
 		buf = malloc(BUFFER_SIZE + 1);
 		if (!buf)
-				return (NULL);
+			return (NULL);
 		ft_memset(buf, 0, BUFFER_SIZE + 1);
 	}
 	/*printf("\n%d\n", *buf);*/
@@ -33,7 +33,8 @@ char	*get_next_line(int fd)
 		line = gnl(fd, buf, NULL, 1);
 	if (line == NULL)
 	{
-		free(buf);
+		if (buf)
+			free(buf);
 		buf = GNL_DONE;
 		return (NULL);
 	}

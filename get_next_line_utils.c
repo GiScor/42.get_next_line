@@ -111,42 +111,48 @@ char	*gnl(int fd, char *buf, char *line, int found)
 		return (NULL);
 	i = 0;
 	ptr = ft_strchr(buf, '\n');
-	while(buf[i] && buf[i] != '\n')			// Count bytes until newline
+	while(buf[i] && buf[i] != '\n')
 		i++;
 	if (buf[i] == '\n')
 		i++;
-	if (found > 0)							// IF new stuff has been read, fill line
+	if (found > 0)
 		line = linefill(buf, i);
 	else
 	{
 		buf = GNL_DONE;
 		return (NULL);
 	}
-	if (ptr && i != ft_strlen(buf))			// If there's a nl in the buffer and it isn't
-	{										// at the end, move the buffer by copying the
-		ptr++;								// contents after the nl to the start of buf.
+	if (ptr && i != ft_strlen(buf))
+	{
+		ptr++;
 		i = 0;
 		while(*ptr && buf[i])
 			buf[i++] = *ptr++;
 		if (*ptr)
 			buf[i] = *ptr;
-		while(buf[i])						// clean the content that has been copied at
-			buf[i++] = 0;					// the beginning of buf.
+		while(buf[i])
+			buf[i++] = 0;
 	}
-	else if (!ptr && found > 0)				// ELSE IF no nl has been found inside buf.
-	{										// read (thus changing the value of found),
-		found = read(fd, buf, BUFFER_SIZE);	// start the recursion and then join lines.
+	else if (!ptr && found > 0)
+	{
+		if (buf && found < BUFFER_SIZE)
+		{
+			/*free(buf);*/
+			/*buf = GNL_DONE;*/
+			return (line);
+		}
+		found = read(fd, buf, BUFFER_SIZE);
 		line = ft_strjoin(line, gnl(fd, buf, line, found));
 	}
-	else									// ELSE (if the buf had a whole line already)
+	else
 	{
-		found = read(fd, buf, BUFFER_SIZE);	// read (thus changing the value of found).
+		found = read(fd, buf, BUFFER_SIZE);
 	    if (found <= 0)
 			buf[0] = 0;
 	}
-	if (found > 0 || (buf && found <= 0))	// IF no new content has been read, but the
-	{										// buffer still has contents in it, fill the
-		/*line = linefill (buf, i);			// line and return it.*/
+	if (found > 0 || (buf && found < BUFFER_SIZE))
+	{
+		// line = linefill (buf, i);
 		return (line);
 	}
 	return (NULL);
