@@ -102,57 +102,57 @@ char	*linefill(char *buf, int len)
 	return (line);
 }
 
-char	*gnl(int fd, char *buf, char *line, int found)
+char	*gnl(int fd, char **buf, char *line, int found)
 {
 	size_t		i;
 	char		*ptr;
 
-	if (buf == GNL_DONE)
+	if (*buf == GNL_DONE)
 		return (NULL);
 	i = 0;
-	ptr = ft_strchr(buf, '\n');
-	while(buf[i] && buf[i] != '\n')
+	ptr = ft_strchr(*buf, '\n');
+	while((*buf)[i] && (*buf)[i] != '\n')
 		i++;
-	if (buf[i] == '\n')
+	if ((*buf)[i] == '\n')
 		i++;
 	if (found > 0)
-		line = linefill(buf, i);
+		line = linefill(*buf, i);
 	else
 	{
-		buf = GNL_DONE;
+		*buf = GNL_DONE;
 		return (NULL);
 	}
-	if (ptr && i != ft_strlen(buf))
+	if (ptr && i != ft_strlen(*buf))
 	{
 		ptr++;
 		i = 0;
-		while(*ptr && buf[i])
-			buf[i++] = *ptr++;
+		while(*ptr && (*buf)[i])
+			(*buf)[i++] = *ptr++;
 		if (*ptr)
-			buf[i] = *ptr;
-		while(buf[i])
-			buf[i++] = 0;
+			(*buf)[i] = *ptr;
+		while((*buf)[i])
+			(*buf)[i++] = 0;
 	}
 	else if (!ptr && found > 0)
 	{
-		if (buf && found < BUFFER_SIZE)
+		if (*buf && found < BUFFER_SIZE)
 		{
-			/*free(buf);*/
-			/*buf = GNL_DONE;*/
+			free(*buf);
+			*buf = GNL_DONE;
 			return (line);
 		}
-		found = read(fd, buf, BUFFER_SIZE);
+		found = read(fd, *buf, BUFFER_SIZE);
 		line = ft_strjoin(line, gnl(fd, buf, line, found));
 	}
 	else
 	{
-		found = read(fd, buf, BUFFER_SIZE);
+		found = read(fd, *buf, BUFFER_SIZE);
 	    if (found <= 0)
-			buf[0] = 0;
+			(*buf)[0] = 0;
 	}
-	if (found > 0 || (buf && found < BUFFER_SIZE))
+	if (found > 0 || (*buf && found < BUFFER_SIZE))
 	{
-		// line = linefill (buf, i);
+		// line = linefill (*buf, i);
 		return (line);
 	}
 	return (NULL);

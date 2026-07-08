@@ -15,6 +15,7 @@
 char	*get_next_line(int fd)
 {
 	static char	*buf = NULL;
+	char		**ptr;
 	char		*line;
 
 	if (buf == GNL_DONE)
@@ -26,15 +27,13 @@ char	*get_next_line(int fd)
 			return (NULL);
 		ft_memset(buf, 0, BUFFER_SIZE + 1);
 	}
-	/*printf("\n%d\n", *buf);*/
+	ptr = &buf;
 	if (*buf == 0)
-		line = gnl(fd, buf, NULL, read(fd, buf, BUFFER_SIZE));
+		line = gnl(fd, ptr, NULL, read(fd, buf, BUFFER_SIZE));
 	else
-		line = gnl(fd, buf, NULL, 1);
+		line = gnl(fd, ptr, NULL, 1);
 	if (line == NULL)
 	{
-		if (buf)
-			free(buf);
 		buf = GNL_DONE;
 		return (NULL);
 	}

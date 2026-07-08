@@ -28,7 +28,7 @@ size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
 char	*ft_strjoin(char *s1, char *s2);
 char	*linefill(char *buf, int len);
-char	*gnl(int fd, char *buf, char *line, int found);
+char	*gnl(int fd, char **buf, char *line, int found);
  void    ft_memset(char *s, int c, size_t n);
 
 #endif // GET_NEXT_LINE_H
