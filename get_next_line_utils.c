@@ -1,15 +1,6 @@
 /*	TODO
  *
-	*	La porcoddio di norma (Posso mettere funzioni anche in get_next_line.c)
-
-	/========================================================================================\
-	|    3 bytes in 1 blocks are definitely lost in loss record 1 of 2                       |
-	|       at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)|
-	|   	by 0x40140A: ft_strjoin (get_next_line_utils.c:63)								 |
-	|   	by 0x4017AB: gnl (get_next_line_utils.c:134)									 |
-	|   	by 0x4012A3: get_next_line (get_next_line.c:26)									 |
-	|   	by 0x4011E3: main (main.c:31)													 |
-	\========================================================================================/
+	 * Non funziona senza nl finale (double free)
  *
 */
 
@@ -64,6 +55,10 @@ char	*ft_strjoin(char *s1, char *s2)
 	size_t	l2;
 	size_t	i;
 
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
 	l1 = ft_strlen(s1);
 	l2 = ft_strlen(s2);
 	s3 = malloc((l1 + l2) + 1);
@@ -107,46 +102,55 @@ char	*linefill(char *buf, int len)
 	return (line);
 }
 
-char	*gnl(int fd, char *buf, char *line, int found)
+char	*gnl(int fd, char **buf, char *line, int found)
 {
 	size_t		i;
 	char		*ptr;
 
+	if (*buf == GNL_DONE)
+		return (NULL);
 	i = 0;
-	ptr = ft_strchr(buf, '\n');
-	while(buf[i] && buf[i] != '\n')			// Count bytes until newline
+	ptr = ft_strchr(*buf, '\n');
+	while((*buf)[i] && (*buf)[i] != '\n')
 		i++;
-	if (buf[i] == '\n')
+	if ((*buf)[i] == '\n')
 		i++;
-	if (found > 0)							// IF new stuff has been read, fill line
-		line = linefill(buf, i);
+	if (found > 0)
+		line = linefill(*buf, i);
 	else
 	{
-		free (buf);
+		*buf = GNL_DONE;
 		return (NULL);
 	}
-	if (ptr && i != ft_strlen(buf))			// If there's a nl in the buffer and it isn't
-	{										// at the end, move the buffer by copying the
-		ptr++;								// contents after the nl to the start of buf.
+	if (ptr && i != ft_strlen(*buf))
+	{
+		ptr++;
 		i = 0;
-		while(*ptr && buf[i])
-			buf[i++] = *ptr++;
+		while(*ptr && (*buf)[i])
+			(*buf)[i++] = *ptr++;
 		if (*ptr)
-			buf[i] = *ptr;
-		while(buf[i])						// clean the content that has been copied at
-			buf[i++] = 0;					// the beginning of buf.
+			(*buf)[i] = *ptr;
+		while((*buf)[i])
+			(*buf)[i++] = 0;
 	}
-	else if (!ptr)							// ELSE IF no nl has been found inside buf.
-	{										// read (thus changing the value of found),
-		found = read(fd, buf, BUFFER_SIZE);	// start the recursion and then join lines.
+	else if (!ptr && found > 0)
+	{
+		if (*buf && found < BUFFER_SIZE)
+		{
+			free(*buf);
+			*buf = GNL_DONE;
+			return (line);
+		}
+		found = read(fd, *buf, BUFFER_SIZE);
 		line = ft_strjoin(line, gnl(fd, buf, line, found));
 	}
-	else									// ELSE (if the buf had a whole line already)
-		found = read(fd, buf, BUFFER_SIZE);	// read (thus changing the value of found).
-	if (found > 0 || (buf && found <= 0))	// IF no new content has been read, but the
-	{										// buffer still has contents in it, fill the
-		line = linefill (buf, i);			// line and return it.
-		return (line);
+	else
+	{
+		found = read(fd, *buf, BUFFER_SIZE);
+	    if (found <= 0)
+			(*buf)[0] = 0;
 	}
+	if (found > 0 || (*buf && found < BUFFER_SIZE))
+		return (line);
 	return (NULL);
 }
