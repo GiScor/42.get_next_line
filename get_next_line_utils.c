@@ -119,6 +119,7 @@ char	*gnl(int fd, char **buf, char *line, int found)
 		line = linefill(*buf, i);
 	else
 	{
+		free(*buf);
 		*buf = GNL_DONE;
 		return (NULL);
 	}
@@ -133,7 +134,7 @@ char	*gnl(int fd, char **buf, char *line, int found)
 		while((*buf)[i])
 			(*buf)[i++] = 0;
 	}
-	else if (!ptr && found > 0)
+	else if ((*buf && found < BUFFER_SIZE) || (!ptr && found > 0))
 	{
 		if (*buf && found < BUFFER_SIZE)
 		{

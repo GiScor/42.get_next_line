@@ -6,12 +6,12 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/02 18:21:13 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 11:29:18 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 99
+# define BUFFER_SIZE 100
 #endif // BUFFER_SIZE
 #ifndef GNL_DONE
 # define GNL_DONE ((char *)1)
