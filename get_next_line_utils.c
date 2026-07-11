@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:09:09 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 16:07:55 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:34:08 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,22 @@ char	*gnl(int fd, char **buf, char *line, int found)
 	else if (*buf && found == 0)
 		return (cleanup(buf, line));
 	else
-	{
-		move_buf(buf, NULL);
-		found = read(fd, *buf, BUFFER_SIZE);
-		if (found <= 0)
-			*buf = cleanup(buf, NULL);
-		if (!ptr && found > 0)
-			line = ft_strjoin(line, gnl(fd, buf, line, found), 0);
-	}
+		to_rec_or_not_to_rec(buf, ptr, line, found, fd);
 	return (line);
+}
+
+char	*to_rec_or_not_to_rec(char **buf, char *ptr, char *line, int found, int fd)
+{
+	if (!ptr)
+	{
+		move_buf(buf, ptr);
+		found = read(fd, *buf, BUFFER_SIZE);
+	}
+	if (found <= 0)
+		*buf = cleanup(buf, NULL);
+	if (!ptr && found > 0)
+		return (ft_strjoin(line, gnl(fd, buf, line, found), 0));
+	return (NULL);
 }
 
 char	*cleanup(char **buf, char *line)

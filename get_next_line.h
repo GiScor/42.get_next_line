@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 16:08:21 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:34:34 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # ifndef BUFFER_SIZE
 
-#  define BUFFER_SIZE 42
+#  define BUFFER_SIZE  10000000
 
 # endif // BUFFER_SIZE
 
@@ -38,5 +38,6 @@ char	*gnl(int fd, char **buf, char *line, int found);
 void	ft_memset(char *s, int c, size_t n);
 char	*cleanup(char **buf, char *line);
 void	move_buf(char **buf, char *ptr);
+char	*to_rec_or_not_to_rec(char **buf, char *ptr, char *line, int found, int fd);
 
 #endif // GET_NEXT_LINE_H
