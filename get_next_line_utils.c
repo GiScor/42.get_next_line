@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:09:09 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 12:49:19 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 13:00:29 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,30 +82,13 @@ char	*gnl(int fd, char **buf, char *line, int found)
 	if (found > 0)
 		line = linefill(*buf, i);
 	else
-	{
-		free(*buf);
-		*buf = ((char *) 1);
-		return (NULL);
-	}
+		return (cleanup(buf, NULL));
 	if (ptr && i != ft_strlen(*buf))
-	{
-		ptr++;
-		i = 0;
-		while (*ptr && (*buf)[i])
-			(*buf)[i++] = *ptr++;
-		if (*ptr)
-			(*buf)[i] = *ptr;
-		while ((*buf)[i])
-			(*buf)[i++] = 0;
-	}
+		move_buf(buf, ptr);
 	else if ((*buf && found < BUFFER_SIZE) || (!ptr && found > 0))
 	{
 		if (*buf && found == 0)
-		{
-			free(*buf);
-			*buf = ((char *) 1);
-			return (line);
-		}
+			return (cleanup(buf, line));
 		found = read(fd, *buf, BUFFER_SIZE);
 		line = ft_strjoin(line, gnl(fd, buf, line, found));
 	}
@@ -118,4 +101,25 @@ char	*gnl(int fd, char **buf, char *line, int found)
 	if (found > 0 || (*buf && found < BUFFER_SIZE))
 		return (line);
 	return (NULL);
+}
+
+char	*cleanup(char **buf, char *line)
+{
+	free(*buf);
+	*buf = ((char *) 1);
+	return (line);
+}
+
+void	move_buf(char **buf, char *ptr)
+{
+	int	i;
+
+	i = 0;
+	ptr++;
+	while (*ptr && (*buf)[i])
+		(*buf)[i++] = *ptr++;
+	if (*ptr)
+		(*buf)[i] = *ptr;
+	while ((*buf)[i])
+		(*buf)[i++] = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 12:45:37 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 13:01:19 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ char	*ft_strjoin(char *s1, char *s2);
 char	*linefill(char *buf, int len);
 char	*gnl(int fd, char **buf, char *line, int found);
 void	ft_memset(char *s, int c, size_t n);
+char	*cleanup(char **buf, char *line);
+void	move_buf(char **buf, char *ptr);
 
 #endif // GET_NEXT_LINE_H
