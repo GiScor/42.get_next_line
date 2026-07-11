@@ -136,7 +136,7 @@ char	*gnl(int fd, char **buf, char *line, int found)
 	}
 	else if ((*buf && found < BUFFER_SIZE) || (!ptr && found > 0))
 	{
-		if (*buf && found < BUFFER_SIZE)
+		if (*buf && found == 0)
 		{
 			free(*buf);
 			*buf = GNL_DONE;
