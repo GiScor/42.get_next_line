@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 13:01:19 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 16:08:21 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # ifndef BUFFER_SIZE
 
-#  define BUFFER_SIZE 100
+#  define BUFFER_SIZE 42
 
 # endif // BUFFER_SIZE
 
@@ -32,8 +32,8 @@
 char	*get_next_line(int fd);
 size_t	ft_strlen(const char *s);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strjoin(char *s1, char *s2);
-char	*linefill(char *buf, int len);
+char	*ft_strjoin(char *s1, char *s2, size_t i);
+char	*linefill(char *buf, size_t i);
 char	*gnl(int fd, char **buf, char *line, int found);
 void	ft_memset(char *s, int c, size_t n);
 char	*cleanup(char **buf, char *line);
