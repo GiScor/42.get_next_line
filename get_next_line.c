@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/01 10:01:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 11:53:32 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/11 12:49:35 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char	*get_next_line(int fd)
 	char		**ptr;
 	char		*line;
 
-	if (buf == GNL_DONE)
+	if (buf == ((char *) 1))
 		return (NULL);
 	if (!buf)
 	{
@@ -34,7 +34,7 @@ char	*get_next_line(int fd)
 		line = gnl(fd, ptr, NULL, 1);
 	if (line == NULL)
 	{
-		buf = GNL_DONE;
+		buf = ((char *) 1);
 		return (NULL);
 	}
 	return (line);
@@ -44,4 +44,34 @@ void	ft_memset(char *s, int c, size_t n)
 {
 	while (n--)
 		*s++ = c;
+}
+
+size_t	ft_strlen(const char *s)
+{
+	size_t	i;
+
+	if (!s || !*s)
+		return (0);
+	i = 0;
+	while (s[i])
+		i++;
+	return (i);
+}
+
+char	*ft_strchr(const char *s, int c)
+{
+	char	*ptr;
+
+	if (!s)
+		return (NULL);
+	ptr = (char *)s;
+	while (*ptr)
+	{
+		if (*ptr == (char)c)
+			return (ptr);
+		ptr++;
+	}
+	if (*ptr == (char)c)
+		return (ptr);
+	return (NULL);
 }
