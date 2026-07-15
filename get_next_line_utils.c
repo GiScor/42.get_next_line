@@ -1,4 +1,4 @@
-#include "get_nexxt_line.h"
+#include "get_next_line.h"
 
 char    *ft_strjoin(char *s1, char *s2, size_t i)
 {
@@ -10,8 +10,8 @@ char    *ft_strjoin(char *s1, char *s2, size_t i)
         return (s2);
     if (!s2)
         return (s1);
-    l1 = ft_strlen(s1);
-    l2 = ft_strlen(s2);
+    l1 = ft_strchr_gnl(s1, 0);
+    l2 = ft_strchr_gnl(s2, 0);
     s3 = malloc(l1 + l2 + 1);
     if (!s3)
         return (NULL);
@@ -36,7 +36,7 @@ int    ft_strchr_gnl(const char *s, int c)
 
 	i = 0;
     if (!s)
-        return (NULL);
+        return (-1);
     ptr = (char *)s;
     while (ptr[i])
     {
@@ -49,7 +49,7 @@ int    ft_strchr_gnl(const char *s, int c)
     return (-1);
 }
 
-char    *ft_arrfill(char *stash, char *buf, size_t i)
+char    *ft_arrfill(char *buf, size_t i)
 {
     char    *arr;
     size_t  len;
