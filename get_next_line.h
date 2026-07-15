@@ -33,5 +33,6 @@ char	*get_next_line(int fd);
 char    *ft_strjoin(char *s1, char *s2, size_t i);
 int		ft_strchr_gnl(const char *s, int c);
 char    *ft_arrfill(char *buf, size_t i);
+char	*ft_nl_handler(char *buf, char *stash, int i);
 
 #endif // GET_NEXT_LINE_H

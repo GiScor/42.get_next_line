@@ -72,3 +72,7 @@ char	*ft_arrfill(char *buf, size_t i)
 	}
 	return (arr);
 }
+
+char	*ft_nl_handler(char *buf, char *stash, int i)
+{
+}
