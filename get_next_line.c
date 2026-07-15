@@ -21,7 +21,7 @@ char	*get_next_line(int fd)
 	else// if there is no nl
 	{
 		if (stash)
-			ft_strjoin(stash, buf);// if there is content stashed, join it with current buf
+			ft_strjoin(stash, buf, (ft_strchr_gnl(stash, 0) + ft_strchr_gnl(buf, 0)));// if there is content stashed, join it with current buf
 		else
 			stash = ft_arrfill(buf, ft_strchr_gnl(buf, 0));// if stash is empty, fill it with current buf content
 		return(get_next_line(fd));
