@@ -49,6 +49,7 @@ int	ft_strchr_gnl(const char *s, int c)
 	return (-1);
 }
 
+// should arrfill actually take i? (as of now, the i parameter is useless)
 char	*ft_arrfill(char *buf, size_t i)
 {
 	char	*arr;
@@ -73,6 +74,36 @@ char	*ft_arrfill(char *buf, size_t i)
 	return (arr);
 }
 
-char	*ft_nl_handler(char *buf, char *stash, int i)
+void	ft_movebuf(char	**buf, int n)
 {
+	int	end;
+	int	i;
+
+	i = 0;
+	end = ft_strchr_gnl(*buf, 0);
+	while (i <= n && n <= end)
+	{
+		(*buf)[i] = (*buf)[n];
+		i++;
+		n++;
+	}
+	while (i <= end)
+	{
+		(*buf)[i] = 0;
+		i++;
+	}
+}
+
+char	*ft_nl_handler(char *buf, char *stash, int n)
+{
+	int		len;
+	char	*line;
+
+	len = ft_strchr_gnl(buf, 0);
+	line = ft_arrfill(buf, 0);
+	if (stash)
+		line = ft_strjoin(stash, line, (ft_strchr_gnl(stash, 0) + n));
+	if (n < len)
+		ft_movebuf(&buf, n + 1);
+	return (line);
 }
