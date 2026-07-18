@@ -49,27 +49,20 @@ int	ft_strchr_gnl(const char *s, int c)
 	return (-1);
 }
 
-// should arrfill actually take i? (as of now, the i parameter is useless)
 char	*ft_arrfill(char *buf, size_t i)
 {
 	char	*arr;
-	size_t	len;
+	size_t	j;
 
-	i = 0;
-	while (buf[i] && buf[i] != '\n')
-		i++;
-	if (buf[i] == '\n')
-		i++;
-	len = i;
-	i = 0;
-	arr = malloc(len + 1);
+	j = 0;
+	arr = malloc(i + 1);
 	if (!arr)
 		return (NULL);
-	arr[len] = 0;
-	while (i < len)
+	arr[i] = 0;
+	while (j < i)
 	{
-		arr[i] = buf[i];
-		i++;
+		arr[j] = buf[j];
+		j++;
 	}
 	return (arr);
 }
@@ -94,16 +87,18 @@ void	ft_movebuf(char	**buf, int n)
 	}
 }
 
-char	*ft_nl_handler(char *buf, char *stash, int n)
+char	*ft_nl_handler(char *buf, char **stash, int n)
 {
 	int		len;
 	char	*line;
 
 	len = ft_strchr_gnl(buf, 0);
-	line = ft_arrfill(buf, 0);
-	if (stash)
-		line = ft_strjoin(stash, line, (ft_strchr_gnl(stash, 0) + n));
+	line = ft_arrfill(buf, n + 1); // n + 1???
+	if (*stash)
+		line = ft_strjoin(*stash, line, (ft_strchr_gnl(*stash, 0) + n));
 	if (n < len)
-		ft_movebuf(&buf, n + 1);
+	{
+		*stash = ft_arrfill(buf+n+1, ft_strchr_gnl(buf+n, 0));
+	}
 	return (line);
 }

@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 17:39:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/18 17:53:25 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/18 18:31:44 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ char	*get_next_line(int fd)
 		return (stash);
 	i = ft_strchr_gnl(buf, '\n');
 	if (i >= 0) 
-		return (ft_nl_handler(buf, stash, i));
+		return (ft_nl_handler(buf, &stash, i));
 	else 
 	{
 		if (stash) 
