@@ -49,22 +49,22 @@ int	ft_strchr_gnl(const char *s, int c)
 	return (-1);
 }
 
-char	*ft_arrfill(char *buf, size_t i)
+char	*ft_arrfill(char *src, size_t i)
 {
-	char	*arr;
+	char	*dst;
 	size_t	j;
 
 	j = 0;
-	arr = malloc(i + 1);
-	if (!arr)
+	dst = malloc(i + 1);
+	if (!dst)
 		return (NULL);
-	arr[i] = 0;
+	dst[i] = 0;
 	while (j < i)
 	{
-		arr[j] = buf[j];
+		dst[j] = src[j];
 		j++;
 	}
-	return (arr);
+	return (dst);
 }
 
 void	ft_movebuf(char	**buf, int n)

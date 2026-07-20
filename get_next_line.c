@@ -14,43 +14,59 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*buf = NULL;
 	static char	*stash = NULL;
-	int			status;
+	char		*buf;
 	int			i;
-	
-	if (!buf)
-	{
-		buf = malloc(BUFFER_SIZE + 1);
-		buf[BUFFER_SIZE] = 0;
-	}
-	if (stash)
-	{
-		free(buf);
-		buf = stash;
-	}
-	else
-		status = read(fd, buf, BUFFER_SIZE);
-	if (status <= 0) 
-		return (stash);
-	i = ft_strchr_gnl(buf, '\n');
-	if (i >= 0) 
-		return (ft_nl_handler(buf, &stash, i));
-	else 
-	{
-		if (stash) 
-			ft_strjoin(stash, buf, (ft_strchr_gnl(stash, 0) + ft_strchr_gnl(buf, 0)));
-		else 
-			stash = ft_arrfill(buf, ft_strchr_gnl(buf, 0));
-		return(get_next_line(fd));
-	}
-	return (NULL);
+
+	buf = NULL;
+	buf_init(&buf, &stash);
+	if (buf == NULL)
+		return (NULL);
+	line = ft_newline(&buf, &stash);
+	free(buf);
+	return(line);
 }
 
-/******************
-* ft_arrfill should take `i` as an argument (it already does but it's basically a leftover);
-* `i` represents how many bytes from the original array (be it buf or stash or whatever) should
-* be copied over to the new array. 
-* `i` will usually be the return value of ft_strchr_gnl, so either the index of nl or the lenght
-* of the string.
-******************/
+char	*ft_newline(char **buf, char **stash)
+{
+	int		b_len;
+
+	b_len = ft_strchr_gnl(*buf, 0);
+	if (ft_strchr_gnl(*buf, '\n') < 0)
+		*stash = ft_strjoin(*stash, *buf, ft_strchr_gnl(*stash, 0) + b_len);
+	else // there is newline in *buf
+		
+}
+
+
+
+void	buf_init(int fd, char **buf, char **stash)
+{
+	int	status;
+
+	if (!*buf)
+	{
+		*buf = malloc(BUFFER_SIZE + 1);
+		if (*buf)
+			(*buf)[BUFFER_SIZE] = 0;
+		else
+			return ;
+	}
+	status = read(fd, *buf, BUFFER_SIZE);
+	if (status > 0)
+		(*buf)[status] = 0;
+	else if (status <= 0)
+		eof_helper(buf, stash);
+}
+
+void	eof_helper(char **buf, char **stash)
+{
+	free(*buf);
+	*buf = NULL;
+	if (*stash)
+	{
+		*buf = ft_arrfill(*stash, ft_strchr_gnl(*stash, 0));
+		free(*stash);
+		*stash = NULL;
+	}
+}
