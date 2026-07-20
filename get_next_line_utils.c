@@ -93,9 +93,12 @@ char	*ft_nl_handler(char *buf, char **stash, int n)
 	char	*line;
 
 	len = ft_strchr_gnl(buf, 0);
-	line = ft_arrfill(buf, n + 1); // n + 1???
+	line = ft_arrfill(buf, n + 1);
 	if (*stash)
+	{
 		line = ft_strjoin(*stash, line, (ft_strchr_gnl(*stash, 0) + n));
+		*stash = NULL;
+	}
 	if (n < len)
 	{
 		*stash = ft_arrfill(buf+n+1, ft_strchr_gnl(buf+n, 0));

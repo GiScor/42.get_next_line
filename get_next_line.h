@@ -20,7 +20,7 @@
 
 # ifndef BUFFER_SIZE
 
-#  define BUFFER_SIZE  10000000
+#  define BUFFER_SIZE  5
 
 # endif // BUFFER_SIZE
 

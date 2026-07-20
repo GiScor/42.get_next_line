@@ -24,7 +24,13 @@ char	*get_next_line(int fd)
 		buf = malloc(BUFFER_SIZE + 1);
 		buf[BUFFER_SIZE] = 0;
 	}
-	status = read(fd, buf, BUFFER_SIZE);
+	if (stash)
+	{
+		free(buf);
+		buf = stash;
+	}
+	else
+		status = read(fd, buf, BUFFER_SIZE);
 	if (status <= 0) 
 		return (stash);
 	i = ft_strchr_gnl(buf, '\n');
