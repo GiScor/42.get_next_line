@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 17:39:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/18 18:31:44 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/22 19:01:11 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,57 +16,84 @@ char	*get_next_line(int fd)
 {
 	static char	*stash = NULL;
 	char		*buf;
-	int			i;
+	char		*line;
+	int			r;
 
-	buf = NULL;
-	buf_init(&buf, &stash);
-	if (buf == NULL)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	line = ft_newline(&buf, &stash);
-	free(buf);
+	buf = NULL;
+	r = INT_MAX; // aggiungi limits.h a header
+	if (!stash)
+	{
+		while (r > 0)
+			r = readnstash(fd, &buf, &stash);
+		free(buf);
+	}
+	line = linefill(&stash);
+	if (line == NULL && stash)
+	{
+		free(stash);
+		stash = NULL;
+	}
 	return(line);
 }
 
-char	*ft_newline(char **buf, char **stash)
+int		readnstash(int fd, char **buf, char **stash)
 {
-	int		b_len;
+	ssize_t	r;
 
-	b_len = ft_strchr_gnl(*buf, 0);
-	if (ft_strchr_gnl(*buf, '\n') < 0)
-		*stash = ft_strjoin(*stash, *buf, ft_strchr_gnl(*stash, 0) + b_len);
-	else // there is newline in *buf
-		
+	arr_init(buf, BUFFER_SIZE); // reinitialize so we don't get garbage
+	r = read(fd, *buf, BUFFER_SIZE);
+	if (!*stash)
+		arr_init(stash, r + 1);
+	if (r > 0 && *stash)
+		*stash = ft_strjoin(*stash, *buf, 0);
+	return (r);
 }
 
-
-
-void	buf_init(int fd, char **buf, char **stash)
+char	*linefill(char **stash)
 {
-	int	status;
+	char	*line;
+	int		len;
+	int		i;
+	int		nl;
 
-	if (!*buf)
+	if (!*stash || !**stash)
+		return (NULL);
+	nl = 1;
+	len = ft_strchr_gnl(*stash, '\n');
+	if (len < 0)
 	{
-		*buf = malloc(BUFFER_SIZE + 1);
-		if (*buf)
-			(*buf)[BUFFER_SIZE] = 0;
-		else
-			return ;
+		nl = 0;
+		len = ft_strchr_gnl(*stash, 0);
 	}
-	status = read(fd, *buf, BUFFER_SIZE);
-	if (status > 0)
-		(*buf)[status] = 0;
-	else if (status <= 0)
-		eof_helper(buf, stash);
+	line = malloc(len + 1 + nl);
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (i < len + nl)
+	{
+		line[i] = (*stash)[i];
+		i++;
+	}
+	line[i] = 0;
+	movearr(stash, len + 1);
+	return (line);
 }
 
-void	eof_helper(char **buf, char **stash)
+void	arr_init(char **arr, size_t n)
 {
-	free(*buf);
-	*buf = NULL;
-	if (*stash)
+	size_t	i;
+
+	*arr = malloc(n + 1);
+	if (*arr)
+		(*arr)[n] = 0;
+	else
+		return ;
+	i = 0;
+	while (i <= n)
 	{
-		*buf = ft_arrfill(*stash, ft_strchr_gnl(*stash, 0));
-		free(*stash);
-		*stash = NULL;
+		(*arr)[i] = 0;
+		i++;
 	}
 }

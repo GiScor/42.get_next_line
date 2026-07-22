@@ -12,7 +12,7 @@ char	*ft_strjoin(char *s1, char *s2, size_t i)
 		return (s1);
 	l1 = ft_strchr_gnl(s1, 0);
 	l2 = ft_strchr_gnl(s2, 0);
-	s3 = malloc(l1 + l2 + 1);
+	arr_init(&s3, l1 + l2);
 	if (!s3)
 		return (NULL);
 	while (i < l1 + l2)
@@ -67,22 +67,22 @@ char	*ft_arrfill(char *src, size_t i)
 	return (dst);
 }
 
-void	ft_movebuf(char	**buf, int n)
+void	movearr(char **arr, int n)
 {
 	int	end;
 	int	i;
 
 	i = 0;
-	end = ft_strchr_gnl(*buf, 0);
+	end = ft_strchr_gnl(*arr, 0);
 	while (i <= n && n <= end)
 	{
-		(*buf)[i] = (*buf)[n];
+		(*arr)[i] = (*arr)[n];
 		i++;
 		n++;
 	}
 	while (i <= end)
 	{
-		(*buf)[i] = 0;
+		(*arr)[i] = 0;
 		i++;
 	}
 }

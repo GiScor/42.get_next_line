@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/18 18:32:30 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/22 18:38:36 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 # ifndef BUFFER_SIZE
 
-#  define BUFFER_SIZE  5
+#  define BUFFER_SIZE  1
 
 # endif // BUFFER_SIZE
 
@@ -28,11 +28,16 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <limits.h>
 
 char	*get_next_line(int fd);
-char    *ft_strjoin(char *s1, char *s2, size_t i);
+int		readnstash(int fd, char **buf, char **stash);
+char	*linefill(char **stash);
+void	arr_init(char **arr, size_t n);
+char	*ft_strjoin(char *s1, char *s2, size_t i);
 int		ft_strchr_gnl(const char *s, int c);
-char    *ft_arrfill(char *buf, size_t i);
-char	*ft_nl_handler(char *buf, char **stash, int i);
+char	*ft_arrfill(char *src, size_t i);
+void	movearr(char **arr, int n);
+char	*ft_nl_handler(char *buf, char **stash, int n);
 
 #endif // GET_NEXT_LINE_H
