@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/01 10:01:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 13:12:40 by gscorzon         ###   ########.fr       */
+/*   Created: 2026/07/22 19:11:05 by gscorzon          #+#    #+#             */
+/*   Updated: 2026/07/22 19:11:54 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,93 +14,86 @@
 
 char	*get_next_line(int fd)
 {
-	static char	*buf = NULL;
-	char		**ptr;
+	static char	*stash = NULL;
+	char		*buf;
 	char		*line;
+	int			r;
 
-	if (buf == ((char *) 1))
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (!buf)
+	buf = NULL;
+	r = INT_MAX; // aggiungi limits.h a header
+	if (!stash)
 	{
-		buf = malloc(BUFFER_SIZE + 1);
-		if (!buf)
-			return (NULL);
-		ft_memset(buf, 0, BUFFER_SIZE + 1);
+		while (r > 0)
+			r = readnstash(fd, &buf, &stash);
+		free(buf);
 	}
-	ptr = &buf;
-	if (*buf == 0)
-		line = gnl(fd, ptr, NULL, read(fd, buf, BUFFER_SIZE));
-	else
-		line = gnl(fd, ptr, NULL, 1);
-	if (line == NULL)
+	line = linefill(&stash);
+	if (line == NULL && stash)
 	{
-		buf = ((char *) 1);
+		free(stash);
+		stash = NULL;
+	}
+	return(line);
+}
+
+int		readnstash(int fd, char **buf, char **stash)
+{
+	ssize_t	r;
+
+	arr_init(buf, BUFFER_SIZE); // reinitialize so we don't get garbage
+	r = read(fd, *buf, BUFFER_SIZE);
+	if (!*stash)
+		arr_init(stash, r + 1);
+	if (r > 0 && *stash)
+		*stash = ft_strjoin(*stash, *buf, 0);
+	return (r);
+}
+
+char	*linefill(char **stash)
+{
+	char	*line;
+	int		len;
+	int		i;
+	int		nl;
+
+	if (!*stash || !**stash)
 		return (NULL);
+	nl = 1;
+	len = ft_strchr_gnl(*stash, '\n');
+	if (len < 0)
+	{
+		nl = 0;
+		len = ft_strchr_gnl(*stash, 0);
 	}
+	line = malloc(len + 1 + nl);
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (i < len + nl)
+	{
+		line[i] = (*stash)[i];
+		i++;
+	}
+	line[i] = 0;
+	movearr(stash, len + 1);
 	return (line);
 }
 
-char	*ft_strjoin(char *s1, char *s2, size_t i)
-{
-	char	*s3;
-	size_t	l1;
-	size_t	l2;
-
-	if (!s1)
-		return (s2);
-	if (!s2)
-		return (s1);
-	l1 = ft_strlen(s1);
-	l2 = ft_strlen(s2);
-	s3 = malloc(l1 + l2 + 1);
-	if (!s3)
-		return (NULL);
-	while (i < l1 + l2)
-	{
-		if (i < l1)
-			s3[i] = s1[i];
-		else
-			s3[i] = s2[i - l1];
-		i++;
-	}
-	s3[l1 + l2] = 0;
-	free(s1);
-	free(s2);
-	return (s3);
-}
-
-void	ft_memset(char *s, int c, size_t n)
-{
-	while (n--)
-		*s++ = c;
-}
-
-size_t	ft_strlen(const char *s)
+void	arr_init(char **arr, size_t n)
 {
 	size_t	i;
 
-	if (!s || !*s)
-		return (0);
+	*arr = malloc(n + 1);
+	if (*arr)
+		(*arr)[n] = 0;
+	else
+		return ;
 	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	char	*ptr;
-
-	if (!s)
-		return (NULL);
-	ptr = (char *)s;
-	while (*ptr)
+	while (i <= n)
 	{
-		if (*ptr == (char)c)
-			return (ptr);
-		ptr++;
+		(*arr)[i] = 0;
+		i++;
 	}
-	if (*ptr == (char)c)
-		return (ptr);
-	return (NULL);
 }

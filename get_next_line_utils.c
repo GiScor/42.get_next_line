@@ -1,96 +1,107 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/07/01 10:09:09 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/11 16:34:08 by gscorzon         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "get_next_line.h"
 
-char	*linefill(char *buf, size_t i)
+char	*ft_strjoin(char *s1, char *s2, size_t i)
 {
-	char	*line;
-	size_t	len;
+	char	*s3;
+	size_t	l1;
+	size_t	l2;
 
-	i = 0;
-	while (buf[i] && buf[i] != '\n')
-		i++;
-	if (buf[i] == '\n')
-		i++;
-	len = i;
-	i = 0;
-	line = malloc(len + 1);
-	if (!line)
+	if (!s1)
+		return (s2);
+	if (!s2)
+		return (s1);
+	l1 = ft_strchr_gnl(s1, 0);
+	l2 = ft_strchr_gnl(s2, 0);
+	arr_init(&s3, l1 + l2);
+	if (!s3)
 		return (NULL);
-	line[len] = 0;
-	while (i < len)
+	while (i < l1 + l2)
 	{
-		line[i] = buf[i];
+		if (i < l1)
+			s3[i] = s1[i];
+		else
+			s3[i] = s2[i - l1];
 		i++;
 	}
-	return (line);
+	s3[l1 + l2] = 0;
+	free(s1);
+	free(s2);
+	return (s3);
 }
 
-char	*gnl(int fd, char **buf, char *line, int found)
+int	ft_strchr_gnl(const char *s, int c)
 {
-	size_t		i;
-	char		*ptr;
+	char	*ptr;
+	int		i;
 
-	if (*buf == ((char *) 1))
-		return (NULL);
 	i = 0;
-	ptr = ft_strchr(*buf, '\n');
-	if (found <= 0)
-		return (cleanup(buf, NULL));
-	line = linefill(*buf, i);
-	if (ptr && ft_strlen(ptr) != ft_strlen(*buf))
-		move_buf(buf, ptr);
-	else if (*buf && found == 0)
-		return (cleanup(buf, line));
-	else
-		to_rec_or_not_to_rec(buf, ptr, line, found, fd);
-	return (line);
-}
-
-char	*to_rec_or_not_to_rec(char **buf, char *ptr, char *line, int found, int fd)
-{
-	if (!ptr)
+	if (!s)
+		return (-1);
+	ptr = (char *)s;
+	while (ptr[i])
 	{
-		move_buf(buf, ptr);
-		found = read(fd, *buf, BUFFER_SIZE);
+		if (ptr[i] == (char)c)
+			return (i);
+		i++;
 	}
-	if (found <= 0)
-		*buf = cleanup(buf, NULL);
-	if (!ptr && found > 0)
-		return (ft_strjoin(line, gnl(fd, buf, line, found), 0));
-	return (NULL);
+	if (ptr[i] == (char)c)
+		return (i);
+	return (-1);
 }
 
-char	*cleanup(char **buf, char *line)
+char	*ft_arrfill(char *src, size_t i)
 {
-	free(*buf);
-	*buf = ((char *) 1);
-	return (line);
+	char	*dst;
+	size_t	j;
+
+	j = 0;
+	dst = malloc(i + 1);
+	if (!dst)
+		return (NULL);
+	dst[i] = 0;
+	while (j < i)
+	{
+		dst[j] = src[j];
+		j++;
+	}
+	return (dst);
 }
 
-void	move_buf(char **buf, char *ptr)
+void	movearr(char **arr, int n)
 {
+	int	end;
 	int	i;
 
 	i = 0;
-	if (ptr)
+	end = ft_strchr_gnl(*arr, 0);
+	while (i <= n && n <= end)
 	{
-		ptr++;
-		while (*ptr && (*buf)[i])
-			(*buf)[i++] = *ptr++;
-		if (*ptr)
-			(*buf)[i] = *ptr;
+		(*arr)[i] = (*arr)[n];
+		i++;
+		n++;
 	}
-	while ((*buf)[i])
-		(*buf)[i++] = 0;
+	while (i <= end)
+	{
+		(*arr)[i] = 0;
+		i++;
+	}
+}
+
+char	*ft_nl_handler(char *buf, char **stash, int n)
+{
+	int		len;
+	char	*line;
+
+	len = ft_strchr_gnl(buf, 0);
+	line = ft_arrfill(buf, n + 1);
+	if (*stash)
+	{
+		line = ft_strjoin(*stash, line, (ft_strchr_gnl(*stash, 0) + n));
+		*stash = NULL;
+	}
+	if (n < len)
+	{
+		*stash = ft_arrfill(buf+n+1, ft_strchr_gnl(buf+n, 0));
+	}
+	return (line);
 }
