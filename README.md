@@ -17,6 +17,8 @@
 To quickly test the fuction, download ```Makefile``` and ```main.c``` from https://github.com/GiScor/42.get_next_line.
 
 You can do so with a simple `curl` command:  
-```curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/main.c - o main.c && curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/Makefile -o Makefile```
+```
+curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/main.c - o main.c && curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/Makefile -o Makefile
+```
 
 # Resources
