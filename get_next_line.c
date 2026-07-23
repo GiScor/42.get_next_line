@@ -6,7 +6,7 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/07/18 17:39:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/22 19:01:11 by gscorzon         ###   ########.fr       */
+/*   Updated: 2026/07/23 16:50:01 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,16 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			r;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
 	buf = NULL;
-	r = INT_MAX; // aggiungi limits.h a header
+	r = INT_MAX;
 	if (!stash)
 	{
 		while (r > 0)
+		{
+			if (fd < 0 || BUFFER_SIZE <= 0)
+				return (NULL);
 			r = readnstash(fd, &buf, &stash);
+		}
 		free(buf);
 	}
 	line = linefill(&stash);
@@ -35,14 +37,14 @@ char	*get_next_line(int fd)
 		free(stash);
 		stash = NULL;
 	}
-	return(line);
+	return (line);
 }
 
-int		readnstash(int fd, char **buf, char **stash)
+int	readnstash(int fd, char **buf, char **stash)
 {
 	ssize_t	r;
 
-	arr_init(buf, BUFFER_SIZE); // reinitialize so we don't get garbage
+	arr_init(buf, BUFFER_SIZE);
 	r = read(fd, *buf, BUFFER_SIZE);
 	if (!*stash)
 		arr_init(stash, r + 1);
@@ -55,7 +57,6 @@ char	*linefill(char **stash)
 {
 	char	*line;
 	int		len;
-	int		i;
 	int		nl;
 
 	if (!*stash || !**stash)
@@ -70,15 +71,22 @@ char	*linefill(char **stash)
 	line = malloc(len + 1 + nl);
 	if (!line)
 		return (NULL);
+	linefillhelper(stash, &line, len, nl);
+	movearr(stash, len + 1);
+	return (line);
+}
+
+void	linefillhelper(char **stash, char **line, int len, int nl)
+{
+	int	i;
+
 	i = 0;
 	while (i < len + nl)
 	{
-		line[i] = (*stash)[i];
+		(*line)[i] = (*stash)[i];
 		i++;
 	}
-	line[i] = 0;
-	movearr(stash, len + 1);
-	return (line);
+	(*line)[i] = 0;
 }
 
 void	arr_init(char **arr, size_t n)

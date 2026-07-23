@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/07/23 16:35:52 by gscorzon          #+#    #+#             */
+/*   Updated: 2026/07/23 16:35:54 by gscorzon         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 
 char	*ft_strjoin(char *s1, char *s2, size_t i)
@@ -85,23 +97,4 @@ void	movearr(char **arr, int n)
 		(*arr)[i] = 0;
 		i++;
 	}
-}
-
-char	*ft_nl_handler(char *buf, char **stash, int n)
-{
-	int		len;
-	char	*line;
-
-	len = ft_strchr_gnl(buf, 0);
-	line = ft_arrfill(buf, n + 1);
-	if (*stash)
-	{
-		line = ft_strjoin(*stash, line, (ft_strchr_gnl(*stash, 0) + n));
-		*stash = NULL;
-	}
-	if (n < len)
-	{
-		*stash = ft_arrfill(buf+n+1, ft_strchr_gnl(buf+n, 0));
-	}
-	return (line);
 }
