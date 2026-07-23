@@ -17,8 +17,24 @@
 To quickly test the fuction, download ```Makefile``` and ```main.c``` from https://github.com/GiScor/42.get_next_line.
 
 You can do so with a simple `curl` command:  
+```bash
+curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/main.c -o main.c && curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/Makefile -o Makefile
 ```
-curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/main.c - o main.c && curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/Makefile -o Makefile
+
+You can then create a text file for the text, or download one with:  
+```bash
+curl https://github.com/GiScor/42.get_next_line/raw/refs/heads/main/test.txt -o test.txt
+```
+
+To run the program do:
+```bash
+make re && cc main.c gnl.a -g && make clean && echo "\nOUTPUT:\n" && ./a.out
 ```
 
 # Resources
+
+No particular resourcer were used apart from man pages and common websites such as stackoverflow.
+
+## AI
+
+LLMs were used massively during the troubleshooting phase, especially to track down memory leaks caused by the edge cases tested by [francinette](https://github.com/xicodomingues/francinette).

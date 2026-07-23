@@ -6,11 +6,11 @@
 #    By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/06/18 12:14:13 by gscorzon          #+#    #+#              #
-#    Updated: 2026/06/22 14:58:51 by gscorzon         ###   ########.fr        #
+#    Updated: 2026/07/23 18:59:14 by gscorzon         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= pipo.a
+NAME	= gnl.a
 CFLAGS	= -Wall -Wextra -Werror
 SRCS	=  get_next_line_utils.c get_next_line.c 
 # get_next_line_utils.c
