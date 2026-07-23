@@ -6,25 +6,15 @@
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/06/18 11:56:23 by gscorzon          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2026/07/22 19:12:43 by gscorzon         ###   ########.fr       */
-=======
-/*   Updated: 2026/07/23 16:49:35 by gscorzon         ###   ########.fr       */
->>>>>>> experimental
+/*   Updated: 2026/07/23 18:24:37 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 
-//# ifndef GNL_DONE
-
-//#  define GNL_DONE (char *)1
-
-//#endif // GNL_DONE
-
 # ifndef BUFFER_SIZE
 
-#  define BUFFER_SIZE  42
+#  define BUFFER_SIZE  10000000
 
 # endif // BUFFER_SIZE
 

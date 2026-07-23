@@ -5,13 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gscorzon <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-<<<<<<< HEAD
-/*   Created: 2026/07/22 19:11:05 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/22 19:11:54 by gscorzon         ###   ########.fr       */
-=======
-/*   Created: 2026/07/18 17:39:21 by gscorzon          #+#    #+#             */
-/*   Updated: 2026/07/23 16:50:01 by gscorzon         ###   ########.fr       */
->>>>>>> experimental
+/*   Created: 2026/07/23 16:55:32 by gscorzon          #+#    #+#             */
+/*   Updated: 2026/07/23 18:40:38 by gscorzon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +19,15 @@ char	*get_next_line(int fd)
 	char		*line;
 	int			r;
 
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
 	buf = NULL;
 	r = INT_MAX;
-	if (!stash)
-	{
-		while (r > 0)
-		{
-			if (fd < 0 || BUFFER_SIZE <= 0)
-				return (NULL);
-			r = readnstash(fd, &buf, &stash);
-		}
-		free(buf);
-	}
-	line = linefill(&stash);
+	while (r > 0 && ft_strchr_gnl(stash, '\n') < 0)
+		r = readnstash(fd, &buf, &stash);
+	if (r >= 0)
+		line = linefill(&stash);
 	if (line == NULL && stash)
 	{
 		free(stash);
@@ -55,6 +46,11 @@ int	readnstash(int fd, char **buf, char **stash)
 		arr_init(stash, r + 1);
 	if (r > 0 && *stash)
 		*stash = ft_strjoin(*stash, *buf, 0);
+	else
+	{
+		free(*buf);
+		*buf = NULL;
+	}
 	return (r);
 }
 
