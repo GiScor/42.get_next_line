@@ -8,7 +8,7 @@ int	main()
 	char ch;
 	char *str;
 	/*int fd = open("./ciao.txt", O_RDONLY);*/
-	int fd = open("ciao.txt", O_RDONLY);
+	int fd = open("test.txt", O_RDONLY);
 
 	/*printf("\t[Press ENTER to print next line]");*/
 	/*scanf("%c",&ch);*/
